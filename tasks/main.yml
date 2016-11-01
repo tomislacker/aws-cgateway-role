@@ -1,0 +1,10 @@
+---
+- name: Install required packages
+  deb:
+    name="{{ item }}"
+    state=present
+  with_items: "{{ cgw__packages }}" 
+  tags:
+    - install
+
+# vim: ft=ansible

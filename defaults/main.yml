@@ -1,0 +1,6 @@
+---
+cgw__packages:
+  - ipsec-tools
+  - racoon
+
+# vim: ft=ansible
