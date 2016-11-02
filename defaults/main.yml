@@ -2,11 +2,13 @@
 cgw_ipkey_pairs:
   - ip: 1.2.3.4
     psk_string: abcdef0123456789
+    extern_ip: 12.34.56.30
 
 cgw__packages:
   - ipsec-tools
   - racoon
 
 cgw__racoon_psktxt: /etc/racoon/psk.txt
+cgw__ipsectools_conf: /etc/ipsec-tools.conf
 
 # vim: ft=ansible

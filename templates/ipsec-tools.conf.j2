@@ -1,0 +1,20 @@
+#!/usr/sbin/setkey -f
+
+flush;
+spdflush;
+
+{% for ipkey in cgw_ipkey_pairs.iteritems() %}
+# [INBOUND] {{ ipkey }}
+spdadd 169.254.44.229/30  169.254.44.230/30   any -P in    ipsec    esp/tunnel/{{ ipkey.ip }}-{{ ipkey.extern_ip }}/require;
+spdadd 172.31.0.0/16      169.254.44.230/30   any -P in    ipsec    esp/tunnel/{{ ipkey.ip }}-{{ ipkey.extern_ip }}/require;
+spdadd 172.31.0.0/16      0.0.0.0/0           any -P in    ipsec    esp/tunnel/{{ ipkey.ip }}-{{ ipkey.extern_ip }}/require;
+{% endfor %}
+
+{% for ipkey in cgw_ipkey_pairs.iteritems() %}
+# [OUTBOUND] {{ ipkey }}
+spdadd 169.254.44.230/30  169.254.44.229/30   any -P out   ipsec    esp/tunnel/{{ ipkey.extern_ip }}-{{ ipkey.ip }}/require;
+spdadd 169.254.44.230/30  172.31.0.0/16       any -P out   ipsec    esp/tunnel/{{ ipkey.extern_ip }}-{{ ipkey.ip }}/require;
+spdadd 0.0.0.0/0          172.31.0.0/16       any -P out   ipsec    esp/{{ ipkey.extern_ip }}-{{ ipkey.ip }}/require;
+{% endfor %}
+
+# vim: ft=ansible

@@ -15,4 +15,12 @@
     group=root
     mode=0640
 
+- name: Configure ipsec-tools.conf
+  template:
+    src="ipsec-tools.conf.j2"
+    dest="{{ cgw__ipsectools_conf }}"
+    owner=root
+    group=root
+    mode=0754
+
 # vim: ft=ansible
