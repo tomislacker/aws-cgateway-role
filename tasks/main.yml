@@ -7,4 +7,12 @@
   tags:
     - install
 
+- name: Configure VPN endpoints and PSKs
+  template:
+    src="psk.txt.j2"
+    dest="{{ cgw__racoon_psktxt }}"
+    owner=root
+    group=root
+    mode=0640
+
 # vim: ft=ansible
