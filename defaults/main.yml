@@ -7,4 +7,6 @@ cgw__packages:
   - ipsec-tools
   - racoon
 
+cgw__racoon_psktxt: /etc/racoon/psk.txt
+
 # vim: ft=ansible
