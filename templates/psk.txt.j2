@@ -1,0 +1,3 @@
+{% for ipkey in cgw_ipkey_pairs.iteritems() %}
+{{ ipkey.ip }} {{ ipkey.psk_string }}
+{% endfor %}

@@ -1,4 +1,8 @@
 ---
+cgw_ipkey_pairs:
+  - ip: 1.2.3.4
+    psk_string: abcdef0123456789
+
 cgw__packages:
   - ipsec-tools
   - racoon
