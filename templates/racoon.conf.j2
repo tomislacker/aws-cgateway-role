@@ -1,0 +1,32 @@
+#jinja2:lstrip_blocks: True
+{% for cfg in cgw_config.iteritems() %}
+  {% for link in cfg.links %}
+
+remote {{ link.tunnel.outside.server }} {
+    exchange_mode {{ link.ike.exchange_mode | default('main') }};
+    lifetime time {{ link.ike.lifetime | default(28800) }} seconds;
+    proposal {
+        encryption_algorithm {{ link.ike.algo_crypt | default('aes128') }};
+        hash_algorithm {{ link.ike.algo_hash | default('sha1') }};
+        authentication_method pre_shared_key;
+        dh_group {{ link.ike.dh_group | default(2) }};
+    }
+    generate_policy off;
+}
+  {% endfor %}
+{% endfor %}
+
+{% for cfg in cgw_config.iteritems() %}
+  {% for link in cfg.links %}
+
+sainfo address {{ link.tunnel.inside.client }} any address {{ link.tunnel.inside.server }} any {
+    pfs_group {{ link.ipsec.dh_group | default(2) }};
+    lifetime time {{ link.ipsec.lifetime | default(3600) }} seconds;
+    encryption_algorithm {{ link.ipsec.algo_crypt | default('aes128') }};
+    authentication_algorithm {{ link.ipsec.algo_hash | default('hmac_sha1') }};
+    {% if link.ipsec.compression | default(True) %}
+    compression_algorithm deflate;
+    {% endif %}
+}
+  {% endfor %}
+{% endfor %}
