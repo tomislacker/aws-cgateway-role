@@ -11,8 +11,7 @@ Requirements
 Role Variables
 --------------
 
-- `cgw_ipkey_pairs` - Array of hashed values including keys `ip`,
-`psk_string`, and `extern_ip` used to configure the key exchange.
+*To be completed. For now, see the [example playbook](#example-playbook).*
 
 Dependencies
 ------------
