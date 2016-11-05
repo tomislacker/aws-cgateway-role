@@ -10,6 +10,7 @@ cgw__ipsec_services:
   - racoon
   - setkey
 
+cgw__racoon_conf: /etc/racoon/racoon.conf
 cgw__racoon_psktxt: /etc/racoon/psk.txt
 cgw__ipsectools_conf: /etc/ipsec-tools.conf
 

@@ -13,13 +13,22 @@
     dest="{{ cgw__racoon_psktxt }}"
     owner=root
     group=root
-    mode=0640
+    mode=0600
   notify: restart ipsec services
 
 - name: Configure ipsec-tools.conf
   template:
     src="ipsec-tools.conf.j2"
     dest="{{ cgw__ipsectools_conf }}"
+    owner=root
+    group=root
+    mode=0754
+  notify: restart ipsec services
+
+- name: Configure racoon.conf
+  template:
+    src="racoon.conf.j2"
+    dest="{{ cgw__racoon_conf }}"
     owner=root
     group=root
     mode=0754
