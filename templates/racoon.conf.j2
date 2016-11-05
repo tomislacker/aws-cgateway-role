@@ -3,6 +3,10 @@ log {{ cgw_racoon_log | default('notify') }};
 path pre_shared_key "{{ cgw__racoon_psktxt }}";
 path certificate "{{ cgw__racoon_certs | default('/etc/racoon/certs') }}";
 
+listen {
+    isakmp {{ cgw_external_ip }} [500];
+}
+
 {% for cfg in cgw_config %}
   {% for link in cfg.links %}
 
