@@ -6,6 +6,10 @@ cgw__packages:
   - ipsec-tools
   - racoon
 
+cgw__ipsec_services:
+  - racoon
+  - setkey
+
 cgw__racoon_psktxt: /etc/racoon/psk.txt
 cgw__ipsectools_conf: /etc/ipsec-tools.conf
 
