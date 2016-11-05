@@ -6,4 +6,12 @@
     state=restarted
   with_items: "{{ cgw__ipsec_services }}"
 
+- name: restart quagga
+  service:
+    name="{{ item }}"
+    enabled=yes
+    state=restarted
+  with_items:
+    - quagga
+
 # vim: ft=ansible
