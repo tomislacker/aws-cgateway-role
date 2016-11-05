@@ -1,5 +1,5 @@
 #jinja2:lstrip_blocks: True
-{% for cfg in cgw_config.iteritems() %}
+{% for cfg in cgw_config %}
   {% for link in cfg.links %}
 
 remote {{ link.tunnel.outside.server }} {
@@ -16,7 +16,7 @@ remote {{ link.tunnel.outside.server }} {
   {% endfor %}
 {% endfor %}
 
-{% for cfg in cgw_config.iteritems() %}
+{% for cfg in cgw_config %}
   {% for link in cfg.links %}
 
 sainfo address {{ link.tunnel.inside.client }} any address {{ link.tunnel.inside.server }} any {

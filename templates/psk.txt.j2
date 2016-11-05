@@ -1,5 +1,5 @@
 #jinja2:lstrip_blocks: True
-{% for cfg in cgw_config.iteritems() %}
+{% for cfg in cgw_config %}
   {% for link in cfg.links %}
 {{ link.tunnel.outside.server }} {{ link.ike.psk }}
   {% endfor %}
