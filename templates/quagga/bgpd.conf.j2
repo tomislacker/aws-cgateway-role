@@ -1,0 +1,25 @@
+#jinja2:lstrip_blocks: True
+hostname ec2-vpn
+password testPassword
+enable password testPassword
+!
+log file /var/log/quagga/bgpd
+!debug bgp events
+!debug bgp zebra
+debug bgp updates
+!
+{% for cfg in cgw_config %}
+router bgp {{ cfg.bgp.asn_client }}
+bgp router-id {{ cfg.links[0].tunnel.outside.client }}
+  {% for link in cfg.links %}
+network {{ link.tunnel.inside.client }}
+  {% endfor %}
+network 0.0.0.0/0
+!
+  {% for link in cfg.links %}
+neighbor {{ link.tunnel.inside.server | ipv4('address') }} remote-as {{ cfg.bgp.asn_server }}
+!
+  {% endfor %}
+!
+{% endfor %}
+line vty

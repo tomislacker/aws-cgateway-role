@@ -14,4 +14,6 @@ cgw__racoon_conf: /etc/racoon/racoon.conf
 cgw__racoon_psktxt: /etc/racoon/psk.txt
 cgw__ipsectools_conf: /etc/ipsec-tools.conf
 
+cgw__quagga_daemons: /etc/quagga/daemons
+
 # vim: ft=ansible

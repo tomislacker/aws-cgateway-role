@@ -1,0 +1,29 @@
+---
+- name: Install required packages for bgp
+  apt:
+    name="{{ item }}"
+    state=present
+  with_items: "{{ cgw__bgp_packages }}"
+
+- name: Enable quagga daemons
+  lineinfile:
+    dest="{{ cgw__quagga_daemons }}"
+    line="{{ item }}=yes"
+    regexp="^{{ item }}=.*$"
+  with_items:
+    - zebra
+    - bgpd
+
+- name: Configure quagga daemons
+  template:
+    dest="/etc/quagga/{{ item }}"
+    src="quagga/{{ item }}.conf.j2"
+    owner=quagga
+    group=quagga
+    mode=0640
+  with_items:
+    - zebra
+    - bgpd
+  notify: restart quagga
+
+# vim: ft=ansible

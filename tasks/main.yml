@@ -34,4 +34,9 @@
     mode=0754
   notify: restart ipsec services
 
+- include: bgp.yml
+  when: "{{ cgw_bgp | default(False) }}"
+  tags:
+    - bgp
+
 # vim: ft=ansible
