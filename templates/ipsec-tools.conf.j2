@@ -17,19 +17,19 @@ spdflush;
 #######
 
 # Inbound: From tunnel
-spadd {{ link.tunnel.inside.server }} {{ link.tunnel.inside.client }} any -P in ipsec
+spdadd {{ link.tunnel.inside.server }} {{ link.tunnel.inside.client }} any -P in ipsec
     esp/tunnel/{{ link.tunnel.outside.server }}-{{ link.tunnel.outside.client }}/require;
 
 # Inbound: From VPC
-spadd {{ cfg.vpc_subnet }} {{ link.tunnel.inside.client }} any -P in ipsec
+spdadd {{ cfg.vpc_subnet }} {{ link.tunnel.inside.client }} any -P in ipsec
     esp/tunnel/{{ link.tunnel.outside.server }}-{{ link.tunnel.outside.client }}/require;
 
 # Outbound: To tunnel
-spadd {{ link.tunnel.inside.client }} {{ link.tunnel.inside.server }} any -P out ipsec
+spdadd {{ link.tunnel.inside.client }} {{ link.tunnel.inside.server }} any -P out ipsec
     esp/tunnel/{{ link.tunnel.outside.client }}-{{ link.tunnel.outside.server }}/require;
 
 # Outbound: To VPC
-spadd {{ link.tunnel.inside.client }} {{ cfg.vpc_subnet }} any -P out ipsec
+spdadd {{ link.tunnel.inside.client }} {{ cfg.vpc_subnet }} any -P out ipsec
     esp/tunnel/{{ link.tunnel.outside.client }}-{{ link.tunnel.outside.server }}/require;
   {% endfor %}
 ###############################################################################
