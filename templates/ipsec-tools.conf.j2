@@ -1,0 +1,40 @@
+#jinja2:lstrip_blocks: True
+#!/usr/sbin/setkey -f
+
+flush;
+spdflush;
+
+{% for cfg in cgw_config %}
+
+
+###############################################################################
+# <{{ cfg.name }}>
+###############################################################################
+  {% for link in cfg.links %}
+
+#######
+# Link: {{ link.name }}
+#######
+
+# Inbound: From tunnel
+spdadd {{ link.tunnel.inside.server }} {{ link.tunnel.inside.client }} any -P in ipsec
+    esp/tunnel/{{ link.tunnel.outside.server }}-{{ link.tunnel.outside.client }}/require;
+
+# Inbound: From VPC
+spdadd {{ cfg.vpc_subnet }} {{ link.tunnel.inside.client }} any -P in ipsec
+    esp/tunnel/{{ link.tunnel.outside.server }}-{{ link.tunnel.outside.client }}/require;
+
+# Outbound: To tunnel
+spdadd {{ link.tunnel.inside.client }} {{ link.tunnel.inside.server }} any -P out ipsec
+    esp/tunnel/{{ link.tunnel.outside.client }}-{{ link.tunnel.outside.server }}/require;
+
+# Outbound: To VPC
+spdadd {{ link.tunnel.inside.client }} {{ cfg.vpc_subnet }} any -P out ipsec
+    esp/tunnel/{{ link.tunnel.outside.client }}-{{ link.tunnel.outside.server }}/require;
+  {% endfor %}
+###############################################################################
+# </{{ cfg.name }}>
+###############################################################################
+{% endfor %}
+
+# vim: ft=ansible

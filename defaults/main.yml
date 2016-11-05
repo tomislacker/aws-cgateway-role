@@ -1,10 +1,17 @@
 ---
-cgw_ipkey_pairs:
-  - ip: 1.2.3.4
-    psk_string: abcdef0123456789
+cgw__bgp_packages:
+  - quagga
 
 cgw__packages:
   - ipsec-tools
   - racoon
+
+cgw__ipsec_services:
+  - racoon
+  - setkey
+
+cgw__racoon_conf: /etc/racoon/racoon.conf
+cgw__racoon_psktxt: /etc/racoon/psk.txt
+cgw__ipsectools_conf: /etc/ipsec-tools.conf
 
 # vim: ft=ansible

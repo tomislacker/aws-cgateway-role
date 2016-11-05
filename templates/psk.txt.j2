@@ -1,3 +1,6 @@
-{% for ipkey in cgw_ipkey_pairs.iteritems() %}
-{{ ipkey.ip }} {{ ipkey.psk_string }}
+#jinja2:lstrip_blocks: True
+{% for cfg in cgw_config %}
+  {% for link in cfg.links %}
+{{ link.tunnel.outside.server }} {{ link.ike.psk }}
+  {% endfor %}
 {% endfor %}

@@ -1,0 +1,9 @@
+---
+- name: restart ipsec services
+  service:
+    name="{{ item }}"
+    enabled=yes
+    state=restarted
+  with_items: "{{ cgw__ipsec_services }}"
+
+# vim: ft=ansible
