@@ -1,20 +1,40 @@
+#jinja2:lstrip_blocks: True
 #!/usr/sbin/setkey -f
 
 flush;
 spdflush;
 
-{% for ipkey in cgw_ipkey_pairs.iteritems() %}
-# [INBOUND] {{ ipkey }}
-spdadd {{ ipkey.server_intern_ip }}/30  169.254.44.230/30   any -P in    ipsec    esp/tunnel/{{ ipkey.ip }}-{{ ipkey.extern_ip }}/require;
-spdadd {{ ipkey.subnet_intern }}      {{ ipkey.client_intern_ip }}/30   any -P in    ipsec    esp/tunnel/{{ ipkey.ip }}-{{ ipkey.extern_ip }}/require;
-spdadd {{ ipkey.subnet_intern }}      0.0.0.0/0           any -P in    ipsec    esp/tunnel/{{ ipkey.ip }}-{{ ipkey.extern_ip }}/require;
-{% endfor %}
+{% for cfg in cgw_config.iteritems() %}
 
-{% for ipkey in cgw_ipkey_pairs.iteritems() %}
-# [OUTBOUND] {{ ipkey }}
-spdadd {{ ipkey.client_intern_ip }}/30  {{ ipkey.server_intern_ip }}/30   any -P out   ipsec    esp/tunnel/{{ ipkey.extern_ip }}-{{ ipkey.ip }}/require;
-spdadd {{ ipkey.client_intern_ip }}/30  {{ ipkey.subnet_intern }}       any -P out   ipsec    esp/tunnel/{{ ipkey.extern_ip }}-{{ ipkey.ip }}/require;
-spdadd 0.0.0.0/0          {{ ipkey.subnet_intern }}       any -P out   ipsec    esp/{{ ipkey.extern_ip }}-{{ ipkey.ip }}/require;
+
+###############################################################################
+# <{{ cfg.name }}>
+###############################################################################
+  {% for link in cfg.links %}
+
+#######
+# Link: {{ link.name }}
+#######
+
+# Inbound: From tunnel
+spadd {{ link.tunnel.inside.server }} {{ link.tunnel.inside.client }} any -P in ipsec
+    esp/tunnel/{{ link.tunnel.outside.server }}-{{ link.tunnel.outside.client }}/require;
+
+# Inbound: From VPC
+spadd {{ cfg.vpc_subnet }} {{ link.tunnel.inside.client }} any -P in ipsec
+    esp/tunnel/{{ link.tunnel.outside.server }}-{{ link.tunnel.outside.client }}/require;
+
+# Outbound: To tunnel
+spadd {{ link.tunnel.inside.client }} {{ link.tunnel.inside.server }} any -P out ipsec
+    esp/tunnel/{{ link.tunnel.outside.client }}-{{ link.tunnel.outside.server }}/require;
+
+# Outbound: To VPC
+spadd {{ link.tunnel.inside.client }} {{ cfg.vpc_subnet }} any -P out ipsec
+    esp/tunnel/{{ link.tunnel.outside.client }}-{{ link.tunnel.outside.server }}/require;
+  {% endfor %}
+###############################################################################
+# </{{ cfg.name }}>
+###############################################################################
 {% endfor %}
 
 # vim: ft=ansible

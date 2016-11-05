@@ -1,12 +1,6 @@
 ---
-cgw_ipkey_pairs:
-  - psk_string: abcdef0123456789
-    client_extern_ip: 12.34.56.30
-    server_extern_ip: 1.2.3.4
-    client_intern_ip: 169.254.44.230
-    server_intern_ip: 169.254.44.229
-    subnet_intern: 172.31.0.0/16
-
+cgw__bgp_packages:
+  - quagga
 
 cgw__packages:
   - ipsec-tools
